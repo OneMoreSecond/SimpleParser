@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Grammar xmlns="http://www.simpleparser.com/Grammar"> 
+  <Symbol name="Cardinal">
+    <SymbolRef name="Digit_Not_0" />
+    <SymbolRef name="Carinal_2_Digits" />
+    <SymbolRef name="Carinal_3_Digits" />
+    <SymbolRef name="Carinal_4_Digits" />
+    <SymbolRef name="Cardinal_5_8_Digits" />
+  </Symbol>
+  
+  <Symbol name="Cardinal_2_Digits">
+    <Production>
+      <Symbol>
+        <SymbolRef name="EatingDigit_1" />
+        <SymbolRef name="Digit_Not_01" />
+      </Symbol>
+      <Terminal name="Output_Ten">
+        <in></in>
+        <out>十</out>
+      </Terminal>
+      <Symbol name="CardinalEatingZero_1_Digit">
+        <SymbolRef name="EatingDigit_0" />
+        <SymbolRef name="Digit_Not_0" />
+      </Symbol>
+    </Production>
+  </Symbol>
+  
+  <Symbol name="Cardinal_3_Digits">
+    <Production>
+      <SymbolRef name="Digit_Not_0" />
+      <Terminal>
+        <in></in>
+        <out>百</out>
+      </Terminal>
+      <Symbol name="CardinalSuffix_2_Digits">
+        <Symbol name="Cardinal_2_Digits_followed">
+          <SymbolRef name="Digit_Not_0" />
+          <SymbolRef name="Output_Ten" />
+          <SymbolRef name="CardinalEatingZero_1_Digit"/>
+        </Symbol>
+        <Production>
+          <SymbolRef name="Digit_0" />
+          <SymbolRef name="CardinalEatingZero_1_Digit" />
+        </Production>
+      </Symbol>
+    </Production>
+  </Symbol>
+  
+  <Symbol name="Cardinal_4_Digits">
+    <Production>
+      <SymbolRef name="Digit_Not_0" />
+      <Terminal>
+        <in></in>
+        <out>千</out>
+      </Terminal>
+      <Symbol name="CardinalSuffix_3_Digits">
+        <SymbolRef name="Cardinal_3_Digits" />
+        <Production>
+          <SymbolRef name="Digit_0" />
+          <Symbol name="CardinalEatingZero_2_Digits">
+            <SymbolRef name="Cardinal_2_Digits_followed" />
+            <Production>
+              <SymbolRef name="EatingDigit_0" />
+              <SymbolRef name="CardinalEatingZero_1_Digit" />
+            </Production>
+          </Symbol>
+        </Production>
+      </Symbol>
+    </Production>
+  </Symbol>
+  
+  <Symbol name="Cardinal_5_8_Digits">
+    <Production>
+      <SymbolRef name="Cardinal_1_4_Digits" />
+      <Terminal>
+        <in></in>
+        <out>万</out>
+      </Terminal>
+      <Symbol name="CardinalSuffix_4_Digits">
+        <SymbolRef name="Cardinal_4_Digits" />
+        <Production>
+          <SymbolRef name="Digit_0" />
+          <Symbol name="CardinalEatingZero_3_Digits">
+            <SymbolRef name="Cardinal_3_Digits" />
+            <Production>
+              <SymbolRef name="EatingDigit_0" />
+              <SymbolRef name="CardinalEatingZero_2_Digits" />
+            </Production>
+          </Symbol>
+        </Production>
+      </Symbol>
+    </Production>
+  </Symbol>
+  
+</Grammar>

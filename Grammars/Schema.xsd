@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.simpleparser.com/Grammar" targetNamespace="http://www.simpleparser.com/Grammar" elementFormDefault="qualified">
+
+  <xs:complexType name="SymbolRefType">
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="repeat" type="xs:boolean" />
+    <xs:attribute name="optional" type="xs:boolean" />
+  </xs:complexType>
+  <xs:element name="SymbolRef" type="SymbolRefType"/>
+
+  <xs:group name="ISymbol">
+    <xs:choice>
+      <xs:element ref="SymbolRef" />
+      <xs:element ref="Terminal" />
+      <xs:element ref="Symbol" />
+    </xs:choice>
+	</xs:group>
+
+  <xs:attributeGrop name="ISymbolAttributes">
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="top" type="xs:boolean" />
+  </xs:attributeGrop>
+  
+  <xs:complexType name="TerminalType">
+    <xs:sequence>
+      <xs:element name="in" type="xs:string" />
+      <xs:element name="out" type="xs:string" />
+    </xs:sequence>
+    <xs:attributeGrop ref="ISymbolAttributes" />
+  </xs:complexType>
+  <xs:element name="Terminal" type="TerminalType"/>
+
+  <xs:complexType name="SymbolType">
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="ISymbol" />
+      <xs:element name="Production" >
+        <xs:complexType>
+          <xs:group ref="ISymbol" maxOccurs="unbounded" />
+          <xs:attribute name="output_order" type="xs:string" />
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+    <xs:attributeGrop ref="ISymbolAttributes" />
+  </xs:complexType>
+  <xs:element name="Symbol" type="SymbolType" />
+
+  <xs:element name="Grammar">
+    <xs:complexType>
+      <xs:choice minOccurs ="0" maxOccurs="unbounded">
+        <xs:element ref="Terminal" />
+        <xs:element ref="Symbol" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

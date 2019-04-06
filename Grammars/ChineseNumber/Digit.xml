@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Grammar xmlns="http://www.simpleparser.com/Grammar">
+  <Symbol name="Digit">
+    <SymbolRef name="Digit_0" />
+    <SymbolRef name="NonZeroDigit" />
+  </Symbol>
+  <Symbol name="Digit_Not_0">
+    <SymbolRef name="Digit_1" />
+    <SymbolRef name="Digit_Not_01" />
+  </Symbol>
+  <Symbol name="Digit_Not_01">
+    <SymbolRef name="Digit_2" />
+    <SymbolRef name="Digit_3" />
+    <SymbolRef name="Digit_4" />
+    <SymbolRef name="Digit_5" />
+    <SymbolRef name="Digit_6" />
+    <SymbolRef name="Digit_7" />
+    <SymbolRef name="Digit_8" />
+    <SymbolRef name="Digit_9" />
+  </Symbol>
+
+  <Terminal name="Output_0">
+    <in></in>
+    <out>零</out>
+  </Terminal>
+  
+  <Terminal name="EatingDigit_0">
+    <in>0</in>
+    <out></out>
+  </Terminal>
+  <Terminal name="EatingDigit_1">
+    <in>1</in>
+    <out></out>
+  </Terminal>
+  
+  <Terminal name="Digit_0">
+    <in>0</in>
+    <out>零</out>
+  </Terminal>
+  <Terminal name="Digit_1">
+    <in>1</in>
+    <out>一</out>
+  </Terminal>
+  <Terminal name="Digit_2">
+    <in>2</in>
+    <out>二</out>
+  </Terminal>
+  <Terminal name="Digit_3">
+    <in>3</in>
+    <out>三</out>
+  </Terminal>
+  <Terminal name="Digit_4">
+    <in>4</in>
+    <out>四</out>
+  </Terminal>
+  <Terminal name="Digit_5">
+    <in>5</in>
+    <out>五</out>
+  </Terminal>
+  <Terminal name="Digit_6">
+    <in>6</in>
+    <out>六</out>
+  </Terminal>
+  <Terminal name="Digit_7">
+    <in>7</in>
+    <out>七</out>
+  </Terminal>
+  <Terminal name="Digit_8">
+    <in>8</in>
+    <out>八</out>
+  </Terminal>
+  <Terminal name="Digit_9">
+    <in>9</in>
+    <out>九</out>
+  </Terminal>
+</Grammar>

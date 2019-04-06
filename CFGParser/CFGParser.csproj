@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Authors>Xianghao Tang</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Test\" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Copy SourceFiles="${SolutionDir}\Grammars\Schema.xsd" DestinationFolder="$(TargetDir)" UseHardLinksIfPossible="true" />
+  </Target>
+
+</Project>

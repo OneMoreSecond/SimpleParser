@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Grammar xmlns="http://www.simpleparser.com/Grammar">
+  <Symbol name="NumberStartingWith0" top="true">
+    <Production>
+      <SymbolRef name="Digit_0" />
+      <SymbolRef name="Digit" repeat="true" optional="true"/>
+    </Production>
+  </Symbol>
+  
+  <Symbol name="Number" top="true">
+    <Production>
+      <SymbolRef name="Sign" optional="true" />
+      <Symbol>
+        <SymbolRef name="Cardinal" />
+        <SymbolRef name="Decimal" />
+        <SymbolRef name="Fraction" />
+      </Symbol>
+    </Production>
+  </Symbol>
+  
+  <Symbol name="Sign">
+    <Terminal>
+      <in>-</in>
+      <out>负</out>
+    </Terminal>
+    <Terminal>
+      <in>+</in>
+      <out>正</out>
+    </Terminal>
+  </Symbol>
+  
+  <Symbol name="Decimal">
+    <Production>
+      <Symbol name="Natural">
+        <SymbolRef name="Digit_0" />
+        <SymbolRef name="Cardinal" />
+      </Symbol>
+      <Terminal>
+        <in>.</in>
+        <out>点</out>
+      </Terminal>
+      <SymbolRef name="Digit" repeat="true" />
+    </Production>
+  </Symbol>
+  
+  <Symbol name="Fraction">
+    <Production output_order="2 1 0">
+      <SymbolRef name="Cardinal" />
+      <Terminal>
+        <in>/</in>
+        <out>分之</out>
+      </Terminal>
+      <SymbolRef name="Cardinal" />
+    </Production>
+  </Symbol>
+</Grammar>
