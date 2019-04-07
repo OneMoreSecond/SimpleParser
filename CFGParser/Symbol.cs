@@ -1,19 +1,24 @@
-﻿using System;
+﻿using System.Linq;
+using System.Text;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CFGParser
 {
-    internal interface ISymbol
-    {
-        string Name { get; }
-        SymbolId Id { get; }
-    }
-
-    internal struct TerminalSymbol : ISymbol
+    internal abstract class Symbol
     {
         public string Name { get; set; }
-        public SymbolId Id { get; private set; }
+        public SymbolId Id { get; protected set; }
+
+        public string GetNameText()
+        {
+            return (Name ?? Grammar.ReservedCharacter + Id.ToString()).AddQuote();
+        }
+
+        abstract public string ToText(Dictionary<SymbolId, Symbol> symbols);
+    }
+
+    internal class TerminalSymbol : Symbol
+    {
         public readonly string Input;
         public readonly string Output;
 
@@ -23,6 +28,17 @@ namespace CFGParser
             Name = name;
             Input = input;
             Output = output;
+        }
+
+        public override string ToText(Dictionary<SymbolId, Symbol> symbols)
+        {
+            var builder = new StringBuilder();
+            builder.Append(GetNameText());
+            builder.Append(": ");
+            builder.Append(Input.AddQuote());
+            builder.Append(" => ");
+            builder.Append(Output.AddQuote());
+            return builder.ToString();
         }
 
         public bool MatchInput(string str)
@@ -36,12 +52,10 @@ namespace CFGParser
         }
     }
 
-    internal struct NonTerminalSymbol : ISymbol
+    internal class NonTerminalSymbol : Symbol
     {
         readonly List<Production> _productions;
 
-        public string Name { get; set; }
-        public SymbolId Id { get; private set; }
         public IReadOnlyCollection<Production> Productions => _productions;
         public bool IsValid => _productions.Count != 0;
 
@@ -52,9 +66,27 @@ namespace CFGParser
             _productions = new List<Production>();
         }
 
-        public void AddProduction(IReadOnlyList<SymbolId> body)
+        public override string ToText(Dictionary<SymbolId, Symbol> symbols)
         {
-            _productions.Add(new Production(this, body));
+            var builder = new StringBuilder();
+            string nameText = GetNameText();
+
+            builder.Append(nameText);
+            builder.Append(" -> ");
+
+            string pad = '\n' + new string(' ', nameText.Length) + "  | ";
+            builder.AppendJoin(pad, _productions.Select(x => x.ToText(symbols)));
+
+            return builder.ToString();
+        }
+        public void AddProduction(IReadOnlyList<SymbolId> body, int[] output_order = null)
+        {
+            _productions.Add(new Production(this, body, output_order));
+        }
+
+        public void AddProduction(SymbolId id)
+        {
+            _productions.Add(new Production(this, id));
         }
     }
 }

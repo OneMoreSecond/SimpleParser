@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CFGParser
 {
@@ -11,6 +9,29 @@ namespace CFGParser
         {
             _value = value;
         }
+
+        public override string ToString()
+        {
+            return _value.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            return _value;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj != null && obj is SymbolId)
+            {
+                return _value == ((SymbolId)obj)._value;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         internal class Generator
         {
             int _nextValue = 0;
@@ -25,5 +46,4 @@ namespace CFGParser
             }
         }
     }
-
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Copy SourceFiles="${SolutionDir}\Grammars\Schema.xsd" DestinationFolder="$(TargetDir)" UseHardLinksIfPossible="true" />
+    <Copy SourceFiles="$(SolutionDir)\Grammars\Schema.xsd" DestinationFolder="$(TargetDir)" UseHardLinksIfPossible="true" />
   </Target>
 
 </Project>

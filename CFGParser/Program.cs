@@ -22,12 +22,12 @@ namespace CFGParser
                 return (int)ReturnValue.InvalidArgument;
             }
 
-            string grammarFolder = args[1];
+            string grammarFolder = args[0];
 
             GrammarDocumentGroup.SchemaPath = "Schema.xsd";
 
-            var documents = new GrammarDocumentGroup();
-            bool success = documents.Load(grammarFolder, (sender, e) =>
+            var documentGroup = new GrammarDocumentGroup();
+            bool success = documentGroup.LoadWithValidation(grammarFolder, (sender, e) =>
             {
                 string severity;
                 switch (e.Severity)
@@ -54,7 +54,7 @@ namespace CFGParser
             var grammar = new Grammar();
             try
             {
-                grammar.Load(documents);
+                grammar.Load(documentGroup);
             }
             catch(AggregateException pack)
             {
@@ -65,6 +65,7 @@ namespace CFGParser
                 return (int)ReturnValue.InvalidGrammar;
             }
 
+            Console.WriteLine(grammar.ToText());
             return 0;
         }
     }

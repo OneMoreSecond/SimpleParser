@@ -1,16 +1,19 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Diagnostics;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 
 namespace CFGParser
 {
-    internal struct GrammarDocument
+    internal class GrammarDocument
     {
         public readonly string Path;
         public readonly XmlDocument Content;
+
+        private GrammarDocument() { }
 
         public GrammarDocument(string path, XmlDocument content)
         {
@@ -26,10 +29,15 @@ namespace CFGParser
 
         List<GrammarDocument> _items;
 
-        public IReadOnlyCollection<GrammarDocument> Items => _items;
+        internal IReadOnlyCollection<GrammarDocument> Items => _items;
 
-        public bool Load(string folder, ValidationEventHandler eventHandler)
+        public bool LoadWithValidation(string folder, ValidationEventHandler eventHandler)
         {
+            if (SchemaPath == null)
+            {
+                return false;
+            }
+
             bool passSchemaValidation = true;
 
             XmlReaderSettings settings = new XmlReaderSettings()
@@ -38,39 +46,28 @@ namespace CFGParser
                 ValidationType = ValidationType.Schema,
             };
 
-            if (SchemaPath != null)
+            settings.Schemas.Add(SchemaNameSpace, SchemaPath);
+            settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+            settings.ValidationEventHandler += (sender, e) =>
             {
-                settings.ValidationType = ValidationType.Schema;
-                settings.Schemas.Add(SchemaNameSpace, SchemaPath);
-                settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
-                settings.ValidationEventHandler += (sender, e) =>
-                {
-                    passSchemaValidation = false;
-                    eventHandler?.Invoke(sender, e);
-                };
-            }
-            else
-            {
-                return false;
-            }
+                passSchemaValidation = false;
+                eventHandler?.Invoke(sender, e);
+            };
 
-            _items = new List<GrammarDocument>();
-            foreach (string path in Directory.EnumerateFiles(folder))
+            var documents = new List<GrammarDocument>();
+            foreach (string path in Directory.EnumerateFiles(folder).Where(x => x.EndsWith(".xml")))
             {
-                if (path.EndsWith(".xml"))
+                var document = new XmlDocument();
+                using (XmlReader reader = XmlReader.Create(path, settings))
                 {
-                    var document = new XmlDocument();
-                    using (XmlReader reader = XmlReader.Create(path, settings))
-                    {
-                        document.Load(reader);
-                    }
-                    _items.Add(new GrammarDocument(path, document));
+                    document.Load(reader);
                 }
+                documents.Add(new GrammarDocument(path, document));
             }
 
-            if (!passSchemaValidation)
+            if (passSchemaValidation)
             {
-                _items = null;
+                _items = documents;
             }
 
             return passSchemaValidation;

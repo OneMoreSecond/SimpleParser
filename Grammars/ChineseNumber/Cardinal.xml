@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Grammar xmlns="http://www.simpleparser.com/Grammar"> 
   <Symbol name="Cardinal">
-    <SymbolRef name="Digit_Not_0" />
-    <SymbolRef name="Carinal_2_Digits" />
-    <SymbolRef name="Carinal_3_Digits" />
-    <SymbolRef name="Carinal_4_Digits" />
+    <Symbol name="Cardinal_1_4_Digits">
+      <SymbolRef name="Digit_Not_0" />
+      <SymbolRef name="Cardinal_2_Digits" />
+      <SymbolRef name="Cardinal_3_Digits" />
+      <SymbolRef name="Cardinal_4_Digits" />
+    </Symbol>
     <SymbolRef name="Cardinal_5_8_Digits" />
   </Symbol>
   

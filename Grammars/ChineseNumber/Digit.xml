@@ -2,7 +2,7 @@
 <Grammar xmlns="http://www.simpleparser.com/Grammar">
   <Symbol name="Digit">
     <SymbolRef name="Digit_0" />
-    <SymbolRef name="NonZeroDigit" />
+    <SymbolRef name="Digit_Not_0" />
   </Symbol>
   <Symbol name="Digit_Not_0">
     <SymbolRef name="Digit_1" />

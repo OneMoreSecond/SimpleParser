@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.simpleparser.com/Grammar" targetNamespace="http://www.simpleparser.com/Grammar" elementFormDefault="qualified">
 
+  <xs:simpleType name="LegalNameType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[^#\s]*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
   <xs:complexType name="SymbolRefType">
-    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="name" type="LegalNameType" use="required" />
     <xs:attribute name="repeat" type="xs:boolean" />
     <xs:attribute name="optional" type="xs:boolean" />
   </xs:complexType>
@@ -16,17 +22,17 @@
     </xs:choice>
 	</xs:group>
 
-  <xs:attributeGrop name="ISymbolAttributes">
-    <xs:attribute name="name" type="xs:string" />
+  <xs:attributeGroup name="ISymbolAttributes">
+    <xs:attribute name="name" type="LegalNameType" />
     <xs:attribute name="top" type="xs:boolean" />
-  </xs:attributeGrop>
+  </xs:attributeGroup>
   
   <xs:complexType name="TerminalType">
     <xs:sequence>
       <xs:element name="in" type="xs:string" />
       <xs:element name="out" type="xs:string" />
     </xs:sequence>
-    <xs:attributeGrop ref="ISymbolAttributes" />
+    <xs:attributeGroup ref="ISymbolAttributes" />
   </xs:complexType>
   <xs:element name="Terminal" type="TerminalType"/>
 
@@ -36,11 +42,17 @@
       <xs:element name="Production" >
         <xs:complexType>
           <xs:group ref="ISymbol" maxOccurs="unbounded" />
-          <xs:attribute name="output_order" type="xs:string" />
+          <xs:attribute name="output_order">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="[\d ]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:complexType>
       </xs:element>
     </xs:choice>
-    <xs:attributeGrop ref="ISymbolAttributes" />
+    <xs:attributeGroup ref="ISymbolAttributes" />
   </xs:complexType>
   <xs:element name="Symbol" type="SymbolType" />
 
